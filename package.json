@@ -1,0 +1,22 @@
+{
+  "name": "paper-markdown-check",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "paper-markdown-check: local-first research workflow tools and bilingual educational notes",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "test": "node --test",
+    "build": "node scripts/build.mjs",
+    "serve": "node scripts/serve.mjs"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "mdast-util-from-markdown": "2.0.2"
+  },
+  "bin": {
+    "paper-markdown-check": "./src/cli.js"
+  }
+}

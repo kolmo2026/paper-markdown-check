@@ -1,0 +1,9 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { inspect } from '../src/check.js';
+test('headings, missing image and explicit reference report exact lines', () => { const result = inspect('# Paper\n### Methods\n\nText.\n\n![Pipeline](figures/pipeline.png)\n\n[Dataset][data]\n', { exists: () => false }); assert.deepEqual(result.issues.map(x => [x.code, x.line]), [['heading-jump', 2], ['missing-file', 6], ['undefined-reference', 8]]); assert.equal(result.errors, 2); });
+test('fenced and inline code are not prose; dollar signs are not diagnosed', () => { const result = inspect('# Good\n\n```md\n#### Fake\n![Missing](nothing.png)\n[bad][no]\n$unterminated\n```\n\n`[inline][no]` costs $5.\n\n## Real\n'); assert.equal(result.issues.length, 0); assert.equal(result.headings.length, 2); });
+test('unclosed fence only, not fake content inside it', () => { const result = inspect('# Good\n```md\n##### Fake\n[bad][missing]\n'); assert.deepEqual(result.issues.map(x => x.code), ['unclosed-fence']); });
+test('references, unicode paths, fragments and remote URLs', () => { const paths = []; const result = inspect('# Paper\n[Dataset][data]\n\n[data]: https://data.invalid/example\n\n![図](%E5%9B%B3%20one.png)\n[remote](https://host.invalid/a.png)\n[section](#paper)\n', { exists: path => { paths.push(path); return true; } }); assert.equal(result.errors, 0); assert.equal(paths.length, 1); assert.ok(paths[0].endsWith('図 one.png')); });
+test('tilde fences close with same character and at least opening length', () => { assert.equal(inspect('~~~js\nconst a = 1;\n~~~~\n').errors, 0); assert.equal(inspect('````js\nx\n```\n').errors, 1); });
+test('lossless: original string stays unchanged and indented code ignored', () => { const text = '# A\n\n    ##### Code\n    [bad][none]\n'; const before = text; assert.equal(inspect(text).errors, 0); assert.equal(text, before); });
