@@ -37,6 +37,8 @@ Exact line reports, fenced/inline code exclusions, unclosed fences, Unicode loca
 
 Source: `src/`, `test/`, `site/` and `scripts/`. The independent static site is built to `docs/`, with English/Japanese equivalents, canonical/hreflang links, sitemap, robots, CNAME and .nojekyll. Its hostname is https://markdown.optmodel.com. Each repository is self-contained; no sibling directory is needed to build.
 
+GitHub hosts the public source code; the live educational website is deployed on Vercel. Legacy GitHub Pages settings and compatibility files are retained, not the current production hosting choice.
+
 ## Limits
 
 Does not parse PDFs, validate mathematical content, judge factual correctness or fetch remote URLs. Code blocks and inline code are excluded; dollar signs are not diagnosed. Undefined shortcut references and complex escaped bracket prose are outside the explicit-reference check. Relative paths resolve beside the input Markdown. No automatic rewrites. Exit codes: 0 no errors (warnings allowed), 1 structural errors, 2 invocation/read failure. CLI diagnostics are English.
